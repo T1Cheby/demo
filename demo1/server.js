@@ -4,6 +4,7 @@ const admin = require("firebase-admin");
 const credentials = require("./serviceKey.json")
 const firebase = require("firebase/app");
 const { getAuth, signInWithEmailAndPassword } = require("firebase/auth");
+const { getDatabase, ref, set, push, onValue } = require("firebase/database");
 const firebaseConfig = {
     apiKey: "AIzaSyCEtQXfqYufvbFVx2rF--9m3fRhdiIjNNo",
     authDomain: "bikerer-33382.firebaseapp.com",
@@ -18,6 +19,8 @@ admin.initializeApp({
     credential: admin.credential.cert(credentials)
 });
 
+const db = getDatabase();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -26,7 +29,7 @@ app.post('/signup', async (req, res) => {
         email: req.body.email,
         password: req.body.password,
         disabled: false, // activate the account
-        emailVerified: true
+        emailVerified: true //inactivate verigy email
     });
     res.json(reqgisterInfo);
 })
@@ -35,9 +38,6 @@ app.post('/login', async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        // const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-        // const userCredential = await auth.signInWithEmailAndPassword(email,password);
-        // const user = userCredential.user;
         const auth = getAuth();
 
         signInWithEmailAndPassword(auth, email, password)
@@ -46,11 +46,9 @@ app.post('/login', async (req, res) => {
                 res.json({ message: "Login successfully", user });
             })
             .catch((error) => {
-                // res.status(400).json({ error: "Wrong password or username" });
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 if (errorCode === 'auth/invalid-credential') {
-                    // Xử lý khi mật khẩu sai hoặc tên người dùng không tồn tại
                     res.status(400).json({ error: "Wrong password or username" });
                 } else {
                     // Xử lý các trường hợp ngoại lệ khác
@@ -64,7 +62,45 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.post('/create-chat-room', (req, res) => {
+    const { user1, user2 } = req.body;
+    const chatRoomRef = push(ref(db, 'chatrooms'), {
+        users: [user1, user2],
+        messages: []
+    });
+
+    res.json({ message: "New chat room is created successfully", chatRoomId: chatRoomRef.key });
+});
+
+app.post('/send-message', (req, res) => {
+    const { chatRoomId, sender, message } = req.body;
+    const messagesRef = ref(db, `chatrooms/${chatRoomId}/messages`);
+    const newMessageRef = push(messagesRef);
+    
+    set(newMessageRef, {
+        sender,
+        message,
+        timestamp: Date.now()
+    });
+
+    res.json({ message: "Message sent successfully" });
+});
+
+app.get('/get-messages', (req, res) => {
+    const chatRoomId = req.body.chatRoomId;
+    const messagesRef = ref(db, `chatrooms/${chatRoomId}/messages`);
+    
+    onValue(messagesRef, (snapshot) => {
+        const messages = snapshot.val();
+        res.json({ messages });
+    }, {
+        onlyOnce: true
+    });
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}.`)
 });
+
+
