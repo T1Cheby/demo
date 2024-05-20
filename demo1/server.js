@@ -5,13 +5,13 @@ const credentials = require("./serviceKey.json")
 const firebase = require("firebase/app");
 const { getAuth, signInWithEmailAndPassword } = require("firebase/auth");
 const firebaseConfig = {
-    // apiKey: "AIzaSyCEtQXfqYufvbFVx2rF--9m3fRhdiIjNNo",
-    // authDomain: "bikerer-33382.firebaseapp.com",
-    // databaseURL: "https://bikerer-33382-default-rtdb.asia-southeast1.firebasedatabase.app",
-    // projectId: "bikerer-33382",
-    // storageBucket: "bikerer-33382.appspot.com",
-    // messagingSenderId: "1096151599905",
-    // appId: "1:1096151599905:web:15e0131b50c45d09e10c60"
+    apiKey: "AIzaSyCEtQXfqYufvbFVx2rF--9m3fRhdiIjNNo",
+    authDomain: "bikerer-33382.firebaseapp.com",
+    databaseURL: "https://bikerer-33382-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "bikerer-33382",
+    storageBucket: "bikerer-33382.appspot.com",
+    messagingSenderId: "1096151599905",
+    appId: "1:1096151599905:web:15e0131b50c45d09e10c60"
 };
 firebase.initializeApp(firebaseConfig);
 admin.initializeApp({
