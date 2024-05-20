@@ -4,7 +4,7 @@ const admin = require("firebase-admin");
 const credentials = require("./serviceKey.json")
 const firebase = require("firebase/app");
 const { getAuth, signInWithEmailAndPassword } = require("firebase/auth");
-const { getDatabase, ref, set, push, onValue } = require("firebase/database");
+const { getDatabase, ref, set, push, onValue, query, orderByChild, equalTo, get } = require("firebase/database");
 const firebaseConfig = {
     apiKey: "AIzaSyCEtQXfqYufvbFVx2rF--9m3fRhdiIjNNo",
     authDomain: "bikerer-33382.firebaseapp.com",
@@ -62,15 +62,42 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/create-chat-room', (req, res) => {
+app.post('/create-chat-room', async (req, res) => {
     const { user1, user2 } = req.body;
-    const chatRoomRef = push(ref(db, 'chatrooms'), {
-        users: [user1, user2],
-        messages: []
+
+    // Lấy danh sách các phòng chat
+    const chatRoomsRef = ref(db, 'chatrooms');
+    const snapshot = await get(chatRoomsRef);
+
+    let chatRoomExists = false;
+
+    // Kiểm tra từng phòng chat
+    snapshot.forEach((childSnapshot) => {
+        const chatRoomData = childSnapshot.val();
+        const usersInChatRoom = chatRoomData.users;
+
+        // Kiểm tra xem có phòng chat nào chứa cả hai người dùng không
+        if (usersInChatRoom.includes(user1) && usersInChatRoom.includes(user2)) {
+            chatRoomExists = true;
+            return; // Dừng việc tìm kiếm
+        }
     });
 
-    res.json({ message: "New chat room is created successfully", chatRoomId: chatRoomRef.key });
+    // Nếu không có phòng chat nào chứa cả hai người dùng, tạo phòng mới
+    if (!chatRoomExists) {
+        const newChatRoomRef = push(chatRoomsRef);
+        set(newChatRoomRef, {
+            users: [user1, user2],
+            messages: []
+        });
+
+        res.json({ message: "Chat room created successfully", chatRoomId: newChatRoomRef.key });
+    } else {
+        res.status(400).json({ message: "Chat room already exists between these users" });
+    }
 });
+
+
 
 app.post('/send-message', (req, res) => {
     const { chatRoomId, sender, message } = req.body;
@@ -85,6 +112,8 @@ app.post('/send-message', (req, res) => {
 
     res.json({ message: "Message sent successfully" });
 });
+
+
 
 app.get('/get-messages', (req, res) => {
     const chatRoomId = req.body.chatRoomId;
