@@ -1,3 +1,27 @@
-/node_modules
+# Node modules
+node_modules/
+
+# Service key (sensitive credentials)
 serviceKey.json
-./helper/firebaseApp.js
+
+# Environment variable files
+.env
+
+# Log files
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+
+# Compiled output
+dist/
+build/
+
+# Firebase configuration
+firebase.js
+
