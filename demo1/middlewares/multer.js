@@ -10,4 +10,6 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
+// might modify this to use the memory one instead of disk
+
 module.exports = upload;

@@ -2,6 +2,9 @@ const authMethod = require("../helper/authMethod");
 const Users = require("../models/Users");
 
 exports.isAuth = async (req, res, next) => {
+    // add the mechanism to automatically generate refresh or something?
+    // add the mechanism to use the refresh to generate the new one
+    // add the mechanism to filter users by role
     const accessTokenFromHeader = req.headers.authorization;
     // console.log(accessTokenFromHeader)
     if(!accessTokenFromHeader){

@@ -5,6 +5,9 @@ const https = require('https');
 const fs = require('fs');
 const { promisify } = require('util');
 
+// support adding file to other services
+// suport adding notes to storage => a text file that can be modififed 
+// check the FE and flutter
 exports.uploadFile = async (file) => {
     try {
         const fileBuffer = fs.readFileSync(file.path);
@@ -129,6 +132,13 @@ exports.downloadFile = async (file) => {
                     });
                 });
             });
+
+            // add more propertiese to file
+            // {
+            //     size: "",
+            //     location: "",
+            //     images: ""
+            // }
             return { message: "File downloaded successfully!", file: imageData };
         } else {
             console.error('Error getting download URL');

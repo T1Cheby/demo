@@ -34,6 +34,17 @@ exports.postMessage = async (chatRoomID, sender, message) => {
         time: currentTime
     });
 
+
+    // upload => firestore storagae => getURL => pass URL to set "firstly, allow to add 1 by one first"
+    // rename -> timestamp + sender 
+    // allow the feature fo reply back message
+    // await set(newMessageRef, {
+    //     sender,
+    //     message,
+    //     time: currentTime,
+    //     path: url
+    // });
+
     console.log({ message: "Send message successfully" });
     return { message: "Message sent successfully" };
 };

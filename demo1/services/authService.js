@@ -63,6 +63,9 @@ exports.login = async (userData) => {
             return { message: "Account is already existed!" };
         }
 
+
+        // add the mechanism to automatically generate refresh or something?
+        // add the mechanism to use the refresh to generate the new one
         let refeshToken = randToken.generate(50);
         if(people.refeshToken){
             console.log(people.refreshToken)
