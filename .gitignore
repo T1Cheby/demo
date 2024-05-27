@@ -1,8 +1,8 @@
 # Node modules
-./demo1/node_modules/
+/demo1/node_modules/
 
 # Service key (sensitive credentials)
-./demo1/serviceKey.json
+/demo1/serviceKey.json
 
 # Environment variable files
 .env
@@ -23,5 +23,5 @@ dist/
 build/
 
 # Firebase configuration
-./demo1/helper/firebaseApp.js
+/demo1/helper/firebaseApp.js
 
