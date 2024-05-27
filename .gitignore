@@ -1,5 +1,5 @@
 # Node modules
-node_modules/
+./demo1/node_modules/
 
 # Service key (sensitive credentials)
 ./demo1/serviceKey.json
@@ -23,5 +23,5 @@ dist/
 build/
 
 # Firebase configuration
-./demo1/helper/firebase.js
+./demo1/helper/firebaseApp.js
 
