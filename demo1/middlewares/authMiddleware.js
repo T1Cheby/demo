@@ -23,7 +23,7 @@ exports.isAuth = async (req, res, next) => {
         // console.log(verified.email !== req.params.email)
         return res.status(401).send("You are not allowed to access this service!");
     } 
-    const user =await Users.getUserByEmail(verified.email);
+    const user =await Users.getUserByEmail(verified.payload.email);
 
     // console.log(user);
     req.user = user;

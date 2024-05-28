@@ -2,26 +2,61 @@ const firebaseApp = require("../helper/firebaseApp");
 const { getDatabase, ref, set, push, onValue, get} = require("firebase/database");
 const db = getDatabase(firebaseApp);
 
+// exports.generateChat = async (user1, user2) => {
+//     const customKey = [user1, user2].sort().join("_"); // Ensure consistent key ordering
+//     const chatRoomsRef = ref(db, `chatRooms/${customKey}`);
+//     const snapshot = await get(chatRoomsRef);
+
+//     if (snapshot.exists()) {
+//         const chatRoomData = snapshot.val();
+//         if (chatRoomData.users.includes(user1) && chatRoomData.users.includes(user2)) {
+//             console.log("Chat room already exists:", customKey);
+//             return { message: "Chat room already exists" };
+//         }
+//     }
+
+//     await set(chatRoomsRef, {
+//         users: [user1, user2].sort(),
+//         messages: []
+//     });
+//     console.log("New chat room created:", customKey);
+//     return { message: "New chat room created", chatRoomID: customKey };
+// };
+
 exports.generateChat = async (user1, user2) => {
-    const customKey = [user1, user2].sort().join("_"); // Ensure consistent key ordering
-    const chatRoomsRef = ref(db, `chatRooms/${customKey}`);
-    const snapshot = await get(chatRoomsRef);
 
-    if (snapshot.exists()) {
-        const chatRoomData = snapshot.val();
-        if (chatRoomData.users.includes(user1) && chatRoomData.users.includes(user2)) {
-            console.log("Chat room already exists:", customKey);
-            return { message: "Chat room already exists" };
+    const chatRoomsReference = ref(db, 'chat');
+    //get data from chat collection
+    const chatSnapshot = await get(chatRoomsReference);
+
+    let roomExists = false;
+
+    chatSnapshot.forEach((child) => {
+        //get data from child component
+        const roomData = child.val();
+        const users = roomData.users;
+
+        if (users.includes(user2) && users.includes(user1)) {
+            roomExists = true;
+            return;
         }
-    }
-
-    await set(chatRoomsRef, {
-        users: [user1, user2].sort(),
-        messages: []
     });
-    console.log("New chat room created:", customKey);
-    return { message: "New chat room created", chatRoomID: customKey };
+
+    if (!roomExists) {
+        //create reference for new child node and its unique ID
+        const newRoomReference = push(chatRoomsReference);
+        //set values for new node
+        await set(newRoomReference, {
+            users: [user1, user2],
+            messages: []
+        });
+        return { message: "Create chat room successfully", chatRoomId: newRoomReference.key };
+    } else {
+        return { message: "Chat room between these users already exists" };
+    }
 };
+
+
 
 exports.postMessage = async (chatRoomID, sender, message) => {
     const messagesReference = ref(db, `chatRooms/${chatRoomID}/messages`);

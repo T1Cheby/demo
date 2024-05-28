@@ -4,7 +4,7 @@ const sign = promisify(jwt.sign).bind(jwt);
 const verify = promisify(jwt.verify).bind(jwt);
 const Users = require("../models/Users");
 
-exports.generateToken = async (dataForToken, accesTokenSecret, accesTokenLife) => {
+exports.generateToken = async (dataForToken, accesTokenSecret, accesTokenLife = 2) => {
     try {
         return await sign(
             {
