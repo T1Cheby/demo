@@ -14,7 +14,7 @@ exports.isAuth = async (req, res, next) => {
 
     const accessTokenSecret = "vital_cap_24";
     const verified = await authMethod.verifyToken(accessTokenFromHeader, accessTokenSecret);
-    console.log(verified.payload.email);
+    // console.log(verified.payload.email);
     if(!verified){
         return res.status(401).send("You are not allowed to access this service!");
     }
