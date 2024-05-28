@@ -1,7 +1,3 @@
-# Node modules
-/demo1/node_modules/
-
-# Service key (sensitive credentials)
 /demo1/serviceKey.json
 
 # Environment variable files
