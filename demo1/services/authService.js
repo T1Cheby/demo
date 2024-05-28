@@ -67,19 +67,19 @@ exports.login = async (userData) => {
 
         // add the mechanism to automatically generate refresh or something?
         // add the mechanism to use the refresh to generate the new one
-        let refeshToken = randToken.generate(50);
-        if(!people.refeshToken){
+        let refreshToken = randToken.generate(50);
+        if(!people.refreshToken){
             console.log(people.refreshToken)
-            await Users.updateRefreshToken(email, refeshToken);
+            await Users.updateRefreshToken(email, refreshToken);
         }else{
-            refeshToken = people.refeshToken;
+            refreshToken = people.refreshToken;
         }
         // console.log(people.refreshToken)
 
         return {
             message: "Login Successfully!",
             accessToken,
-            refeshToken,
+            refreshToken: refreshToken,
             user: {
                 email: people.email
             }

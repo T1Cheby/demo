@@ -48,14 +48,14 @@ exports.deleteAuth = async (req, res) => {
 }
 
 
-exports.refeshToken = async (req,res) => {
-    const accessTokenFromHeader = req.headers.x_authorization;
+exports.refreshToken = async (req,res) => {
+    const accessTokenFromHeader = req.headers.authorization;
     if(!accessTokenFromHeader){
         return res.status(400).send("cant find access token");
     }
 
-    const refeshTokenFromBody = req.body.refeshToken;
-    if(!refeshTokenFromBody){
+    const refreshTokenFromBody = req.body.refreshToken;
+    if(!refreshTokenFromBody){
         return res.status(400).send("cant find refresh token");
     };
 
@@ -76,7 +76,7 @@ exports.refeshToken = async (req,res) => {
         return res.status(400).send("users does not exist");
     }
 
-    if(refeshTokenFromBody != user.refeshToken){
+    if(refreshTokenFromBody != user.refreshToken){
         return res.status(400).send("not suitable refresh token");
     }
 
@@ -84,7 +84,7 @@ exports.refeshToken = async (req,res) => {
         email: userEmail
     }
 
-    const accessToken = authMethod.generateToken(
+    const accessToken = await authMethod.generateToken(
         dataForToken,
         accessTokenSecret,
         accessTokenLife
