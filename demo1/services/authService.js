@@ -14,9 +14,9 @@ const randToken = require("rand-token");
 exports.login = async (userData) => {
     const { email, password } = userData;
     try {
-        // const userCredential = await signInWithEmailAndPassword(authFApp, email, password);
-        // const user = userCredential.user.providerData[0];
-        // console.log("Login successful with this authentication account: " + user.email);
+        const userCredential = await signInWithEmailAndPassword(authFApp, email, password);
+        const user = userCredential.user.providerData[0];
+        console.log("Login successful with this authentication account: " + user.email);
 
 
         // const { stsTokenManager } = userCredential.user;
@@ -38,13 +38,13 @@ exports.login = async (userData) => {
         // console.log(people)
         if(!people){
             console.log(people)
-            // return { message: "Account is already existed!" };
+            return { message: "Cant Found Account" };
         }
 
         const isPasswordValid = bcrypt.compareSync(password, people.password);
         if(!isPasswordValid){
             console.log(isPasswordValid)
-            // return { message: "Account is already existed!" };
+            return { message: "Invalid Password" };
         }
         const accessTokenLife = "2h";
         const accessTokenSecret = "vital_cap_24";
@@ -56,18 +56,19 @@ exports.login = async (userData) => {
             accessTokenSecret,
             accessTokenLife
         );
+
         // console.log(accessToken)
 
         if(!accessToken){
             
-            return { message: "Account is already existed!" };
+            return { message: "Unable to generate token" };
         }
 
 
         // add the mechanism to automatically generate refresh or something?
         // add the mechanism to use the refresh to generate the new one
         let refeshToken = randToken.generate(50);
-        if(people.refeshToken){
+        if(!people.refeshToken){
             console.log(people.refreshToken)
             await Users.updateRefreshToken(email, refeshToken);
         }else{
@@ -79,7 +80,9 @@ exports.login = async (userData) => {
             message: "Login Successfully!",
             accessToken,
             refeshToken,
-            user: people
+            user: {
+                email: people.email
+            }
         }
 
 

@@ -1,0 +1,27 @@
+# Node modules
+/demo1/node_modules/
+
+# Service key (sensitive credentials)
+/demo1/serviceKey.json
+
+# Environment variable files
+.env
+
+# Log files
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+
+# Compiled output
+dist/
+build/
+
+# Firebase configuration
+/demo1/helper/firebaseApp.js
+
