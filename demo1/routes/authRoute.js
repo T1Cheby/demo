@@ -7,5 +7,5 @@ router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.post("/refresh-token", authController.refeshToken);
 const isAuth = authMiddleware.isAuth;
-router.delete("/delete-auth/:email", isAuth, authController.deleteAuth);
+// router.delete("/delete-auth/:email", isAuth, authController.deleteAuth);
 module.exports = router; 

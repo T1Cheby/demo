@@ -19,23 +19,8 @@ exports.login = async (userData) => {
         console.log("Login successful with this authentication account: " + user.email);
 
 
-        // const { stsTokenManager } = userCredential.user;
-        // const accessToken = stsTokenManager.accessToken;
-        // const token = jwt.sign({ accessToken }, "secret", { expiresIn: '1h' });
-        // user.token = token;
-
-        // const docRef = doc(usersRef, email);
-        // const docSnap = await getDoc(docRef);
-
-        // if (docSnap.exists()) {
-        //     console.log("Document data:", docSnap.data());
-        // } else {
-        //     console.log("No such document!");
-        // }
-        // return { message: "Login successful", user };
-
         const people = await Users.getUserByEmail(email);
-        // console.log(people)
+
         if(!people){
             console.log(people)
             return { message: "Cant Found Account" };
@@ -57,7 +42,6 @@ exports.login = async (userData) => {
             accessTokenLife
         );
 
-        // console.log(accessToken)
 
         if(!accessToken){
             
@@ -128,19 +112,19 @@ exports.signup = async (userData) => {
     }
 }
 
-exports.deleteAuth = async (userData) => {
-    const user = authFApp.currentUser;
-    if (user) {
-        try {
-            await deleteUser(user);
-            console.log("User deleted successfully");
-            return { message: "User deleted successfully" };
-        } catch (error) {
-            console.error("Error deleting user: ", error);
-            return { message: "Error deleting user", error: error.message };
-        }
-    } else {
-        return { message: "No user is currently authenticated" };
-    }
-}
+// exports.deleteAuth = async (userData) => {
+//     const user = authFApp.currentUser;
+//     if (user) {
+//         try {
+//             await deleteUser(user);
+//             console.log("User deleted successfully");
+//             return { message: "User deleted successfully" };
+//         } catch (error) {
+//             console.error("Error deleting user: ", error);
+//             return { message: "Error deleting user", error: error.message };
+//         }
+//     } else {
+//         return { message: "No user is currently authenticated" };
+//     }
+// }
 

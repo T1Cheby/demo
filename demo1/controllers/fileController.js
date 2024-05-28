@@ -1,9 +1,7 @@
 const fileService = require("../services/fileService");
-const fs = require('fs');
-const { promisify } = require('util');
-const setTimeoutPromise = promisify(setTimeout);
-const unlinkPromise = promisify(fs.unlink);
-const readFilePromise = promisify(fs.readFile);
+// const fs = require('fs');
+// const { promisify } = require('util');
+
 
 exports.uploadFile = async (req, res) => {
     const file = req.file;
@@ -35,19 +33,21 @@ exports.getFile = async (req, res) => {
     console.log(response);
     if (response.message === "File downloaded successfully!") {
         try {
-            // const data = await readFilePromise(filePath);
-            // res.writeHead(200, { 'Content-Type': 'image/png' });
-            // res.end(response.file, 'Base64');
 
-            // await setTimeoutPromise(1000);
-            // await unlinkPromise(filePath);
 
             if (response.file) {
-                res.writeHead(200, { 'Content-Type': 'image/png' });
+                if(fileName.split(".")[1] === "mp4"){
+                    res.writeHead(200, { 'Content-Type': "video/mp4" });
+                } else if (fileName.split(".")[1] === "png"){
+                    res.writeHead(200, { 'Content-Type': "image/png" });
+                } else if (fileName.split(".")[1] === "jpeg") {
+                    res.writeHead(200, { 'Content-Type': "image/jpeg" });
+                }else{
+                    res.writeHead(200, { 'Content-Type': "text/plain" });
+                }
                 res.end(response.file); // Sending the buffer directly
             } 
 
-            // console.log(`${filePath} was deleted`);
         } catch (err) {
             console.log(err);
             res.status(500).json({ message: "Error: Can't read or get file" });

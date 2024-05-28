@@ -23,6 +23,15 @@ exports.isAuth = async (req, res, next) => {
     //     // console.log(verified.email !== req.params.email)
     //     return res.status(401).send("You are not allowed to access this service!");
     // } 
+
+    // Check if the token is expired
+    const tokenExpiryDate = new Date(verified.payload.exp * 1000);
+    const currentTime = new Date();
+
+    if (tokenExpiryDate < currentTime) {
+        return res.status(401).send("Access token expired. Please refresh your token.");
+    }
+    
     const user =await Users.getUserByEmail(verified.payload.email);
 
     // console.log(user);

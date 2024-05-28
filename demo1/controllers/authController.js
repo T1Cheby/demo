@@ -31,25 +31,25 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.deleteAuth = async (req, res) => {
-    try {
-        // const email = req.params.email;
-        // const response = await authService.deleteAuth({ email });
-        // if (response.message) {
-        //     res.status(200).json(response);
-        // } else {
-        //     res.status(404).json({ message: "Error: Can't Delete Authentication!" });
-        // }
-        res.status(200).json({message: "Okay, I'm Fine!"});
-    } catch (error) {
-        console.error('Delete authentication error:', error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-}
+// exports.deleteAuth = async (req, res) => {
+//     try {
+//         // const email = req.params.email;
+//         // const response = await authService.deleteAuth({ email });
+//         // if (response.message) {
+//         //     res.status(200).json(response);
+//         // } else {
+//         //     res.status(404).json({ message: "Error: Can't Delete Authentication!" });
+//         // }
+//         res.status(200).json({message: "Okay, I'm Fine!"});
+//     } catch (error) {
+//         console.error('Delete authentication error:', error);
+//         res.status(500).json({ message: "Internal Server Error" });
+//     }
+// }
 
 
 exports.refeshToken = async (req,res) => {
-    const accessTokenFromHeader = req.headers.x_authorization;
+    const accessTokenFromHeader = req.headers.authorization;
     if(!accessTokenFromHeader){
         return res.status(400).send("cant find access token");
     }

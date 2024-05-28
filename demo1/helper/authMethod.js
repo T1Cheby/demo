@@ -22,6 +22,7 @@ exports.generateToken = async (dataForToken, accesTokenSecret, accesTokenLife = 
     }
 }
 
+// equal to verify
 exports.decodeToken = async (token, secretKey) => {
     try {
         return await verify(token, secretKey, {
