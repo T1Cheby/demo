@@ -51,15 +51,15 @@ exports.deleteAuth = async (req, res) => {
 exports.refeshToken = async (req,res) => {
     const accessTokenFromHeader = req.headers.x_authorization;
     if(!accessTokenFromHeader){
-        res.status(400).send("cant find acess token");
+        return res.status(400).send("cant find access token");
     }
 
     const refeshTokenFromBody = req.body.refeshToken;
     if(!refeshTokenFromBody){
-        res.status(400).send("cant find refresh token");
+        return res.status(400).send("cant find refresh token");
     };
 
-    const accessTokenLife = "2h";
+    const accessTokenLife = "30m";
     const accessTokenSecret = "vital_cap_24";
 
     const decoded = await authMethod.decodeToken(
@@ -68,16 +68,16 @@ exports.refeshToken = async (req,res) => {
     )
 
     if(!decoded){
-        res.status(400).send("not suitable access token");
+        return res.status(400).send("not suitable access token");
     }
     const userEmail = decoded.payload.email;
     const user = await Users.getUserByEmail(userEmail);
     if(!user){
-        res.status(400).send("users does not exist");
+        return res.status(400).send("users does not exist");
     }
 
     if(refeshTokenFromBody != user.refeshToken){
-        res.status(400).send("not suitable refresh token");
+        return res.status(400).send("not suitable refresh token");
     }
 
     const dataForToken = {
