@@ -25,7 +25,7 @@ const db = getDatabase(firebaseApp);
 
 exports.generateChat = async (user1, user2) => {
 
-    const chatRoomsReference = ref(db, 'chat');
+    const chatRoomsReference = ref(db, 'chatRooms');
     //get data from chat collection
     const chatSnapshot = await get(chatRoomsReference);
 
