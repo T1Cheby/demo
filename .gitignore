@@ -21,5 +21,5 @@ dist/
 build/
 
 # Firebase configuration
-/demo1/helper/firebaseApp.js
+# /demo1/helper/firebaseApp.js
 
